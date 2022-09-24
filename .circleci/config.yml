@@ -27,7 +27,7 @@ jobs:
               docker tag udagram-frontend:local ${docker_user_name}/udagram-frontend:v1
               docker tag reverseproxy ${docker_user_name}/reverseproxy:v1
 
-              echo "$docker_user_name" | docker login -u "$docker_user_name" --password-stdin
+              echo "$docker_user_name" | docker login -u "$docker_user_name" -p "$docker_pass"
               docker push ${docker_user_name}/udagram-api-user:v1
               docker push ${docker_user_name}/udagram-api-feed:v1
               docker push ${docker_user_name}/udagram-frontend:v1
