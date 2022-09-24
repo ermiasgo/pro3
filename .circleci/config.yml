@@ -5,7 +5,9 @@ jobs:
       - image: cimg/node:16.16.0
     steps:
       - checkout
-      - run: node --version
+      - run: | 
+              docker images
+              docker ps 
   build:
     docker:
       - image: cimg/node:14.17.3
@@ -18,8 +20,19 @@ jobs:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
-      - run: docker-compose -f docker-compose-build.yaml build --parallel 
-    
+      - run: |
+              docker-compose -f docker-compose-build.yaml build --parallel 
+              docker tag udagram-api-user ${docker_user_name}/udagram-api-user:v1
+              docker tag udagram-api-feed ${docker_user_name}/udagram-api-feed:v1
+              docker tag udagram-frontend:local ${docker_user_name}/udagram-frontend:v1
+              docker tag reverseproxy ${docker_user_name}/reverseproxy:v1
+
+              echo "$docker_user_name" | docker login -u "$docker_user_name" --password-stdin
+              docker push ${docker_user_name}/udagram-api-user:v1
+              docker push ${docker_user_name}/udagram-api-feed:v1
+              docker push ${docker_user_name}/udagram-frontend:v1
+              docker push ${docker_user_name}/reverseproxy:v1
+              
 workflows:
   test-deploy:
     jobs:
