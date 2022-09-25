@@ -22,6 +22,9 @@ jobs:
           docker_layer_caching: true
       - run: |
               echo "${docker_user_name} $docker_user_name hello"
+              echo "$docker_user_name"
+              echo $docker_user_name
+              echo ${docker_user_name}
               docker-compose -f docker-compose-build.yaml build --parallel
 
               docker tag udagram-api-user:latest ${docker_user_name}/udagram-api-user
