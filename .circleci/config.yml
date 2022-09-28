@@ -13,9 +13,7 @@ jobs:
       - image: cimg/node:14.17.3
         auth:
           username: $docker_user_name
-          password: $docker_pass  # context / project UI env-var reference
-      #Error calling workflow: 'docker-cred'
-#Cannot find a definition for job named docker
+          password: $docker_pass  
     steps:
       - checkout
       - setup_remote_docker:
