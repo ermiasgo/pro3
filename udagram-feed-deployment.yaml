@@ -18,7 +18,7 @@ spec:
       - name: feed-api
         image: davidermias/udagram-api-feed
         ports:
-        - containerPort: 8080
+        - containerPort: 8100
         envFrom:
           - configMapRef:
               name: envconfigmap
