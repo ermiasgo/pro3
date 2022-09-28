@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+  name: envconfigmap
+data: 
+ AWS_BUCKET: udagram-kassa-dev
+ AWS_PROFILE: default
+ AWS_REGION: us-west-1
+ URL: "http://localhost:8100"   
