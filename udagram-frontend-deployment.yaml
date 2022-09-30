@@ -1,40 +1,28 @@
-version: "3"
-services:
-  reverse-proxy:
-      image: davidermias/reverseproxy
-      ports:
-          - 8080:8080
-      restart: always
-      depends_on:
-        - backend-user
-        - backend-feed
-  backend-user:
-    image: davidermias/udagram-api-user
-    environment:
-      POSTGRES_USERNAME: $POSTGRES_USERNAME
-      POSTGRES_PASSWORD: $POSTGRES_PASSWORD 
-      POSTGRES_DB: $POSTGRES_DB 
-      POSTGRES_HOST: $POSTGRES_HOST
-      AWS_REGION: $AWS_REGION 
-      AWS_PROFILE: $AWS_PROFILE 
-      AWS_BUCKET: $AWS_BUCKET
-      JWT_SECRET: $JWT_SECRET
-      URL: "http://localhost:8100"
-  backend-feed:
-    image: davidermias/udagram-api-feed
-    volumes:
-      - /Ermi/DELL/.aws:/root/.aws
-    environment:
-      POSTGRES_USERNAME: $POSTGRES_USERNAME
-      POSTGRES_PASSWORD: $POSTGRES_PASSWORD 
-      POSTGRES_DB: $POSTGRES_DB
-      POSTGRES_HOST: $POSTGRES_HOST
-      AWS_REGION: $AWS_REGION
-      AWS_PROFILE: $AWS_PROFILE 
-      AWS_BUCKET: $AWS_BUCKET
-      JWT_SECRET: $JWT_SECRET
-      URL: "http://localhost:8100"
-  frontend:
-    image: davidermias/udagram-frontend
-    ports:
-      - "8100:80"
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: davidermias/udagram-frontend
+        ports:
+        - containerPort: 8100
+        envFrom:
+          - configMapRef:
+              name: envconfigmap
+          - secretRef:              
+              name: awssecret
+          - secretRef: 
+              name: dbsecret
